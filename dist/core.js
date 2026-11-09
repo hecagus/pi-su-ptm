@@ -1,4 +1,5 @@
 export const DECIMAL_COUNT = 2_000_000;
+export const EXPANDED_DECIMAL_COUNT = 10_000_000;
 export const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 export const pad = n => String(n).padStart(2, '0');
 export function isValidDate(day, month, year) {

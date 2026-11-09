@@ -1,0 +1,22 @@
+{
+  "total": 10000000,
+  "chunkSize": 2000000,
+  "chunks": [
+    {
+      "file": "01.txt",
+      "sha256": "eaa1f0236bf5c47871547cc625bcb035582f6331ae8f6f7289d054d8878b07bf"
+    },
+    {
+      "file": "02.txt",
+      "sha256": "a4d688bcb03599c9251a4918bd7507ac6612bd3102668eca87be5b30f78b07c9"
+    },
+    {
+      "file": "03.txt",
+      "sha256": "d229d108f404956a0768f95be08bfb49d0be4289b53cc519ec2314243bb54166"
+    },
+    {
+      "file": "04.txt",
+      "sha256": "e2c4d9b66d95f569c2dd2607c7aecfc8948a9176fd5b19f1ee4385526f3ad03b"
+    }
+  ]
+}
