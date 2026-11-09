@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101410">
+  <meta name="description" content="Tu cumpleaños, tu nacimiento o cualquier número: búscalo entre dos millones de decimales de pi y descubre su posición real.">
+  <title>π su PTM — Tu fecha en el infinito</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./cosmic.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="header">
+      <a class="brand" href="./" aria-label="Pi su PTM, inicio"><span class="brand-pi">π</span><span>su PTM<span class="brand-dot">.</span></span></a>
+      <div class="header-right"><a class="oracle-nav" href="#oracle">El oráculo</a><button class="about-button" id="about-open" aria-haspopup="dialog">¿Qué es esto? <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12" stroke="currentColor" stroke-width="1.5"/></svg></button></div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="live-dot"></span> UN PEQUEÑO EXPERIMENTO CON EL INFINITO</p>
+          <h1 id="hero-title">Tu fecha.<br><span>En el infinito.</span></h1>
+          <p class="hero-description">Pon tu mes, día y año. Viaja desde <strong>3.14159…</strong> hasta tu coincidencia. Después, deja que el oráculo se invente el resto.</p>
+          <div class="hero-meta"><span class="tiny-cross" aria-hidden="true">✳</span><span>2 millones de decimales. Una coincidencia muy tuya.</span></div>
+        </div>
+        <div class="pi-art" aria-hidden="true">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div>
+          <span class="orbit-dot dot-one"></span><span class="orbit-dot dot-two"></span>
+          <div class="pi-symbol">π</div><span class="art-label label-one">IRRACIONAL, COMO NOSOTROS.</span>
+          <div class="number-ribbon">3.141592653589793238462643383279<span>5028</span>8419716939937510</div>
+          <span class="art-coordinate">22° / ∞</span>
+        </div>
+      </section>
+
+      <section class="lab" aria-label="Buscador en los decimales de pi">
+        <div class="input-panel">
+          <div class="panel-heading"><span class="micro-label">01 / ELIGE TU COINCIDENCIA</span><span class="panel-star" aria-hidden="true">✳</span></div>
+          <div class="mode-tabs" role="tablist" aria-label="Tipo de búsqueda">
+            <button class="mode-tab active" id="tab-birthday" role="tab" aria-selected="true" aria-controls="search-panel" data-mode="birthday"><span class="tab-icon" aria-hidden="true">✳</span><span>Pi cumpleaños</span></button>
+            <button class="mode-tab" id="tab-birth" role="tab" aria-selected="false" aria-controls="search-panel" tabindex="-1" data-mode="birth"><span class="tab-icon" aria-hidden="true">◷</span><span>Pi nacimiento</span></button>
+            <button class="mode-tab" id="tab-chaos" role="tab" aria-selected="false" aria-controls="search-panel" tabindex="-1" data-mode="chaos"><span class="tab-icon" aria-hidden="true">↯</span><span>Pi su PTM</span></button>
+          </div>
+          <div id="search-panel" role="tabpanel" aria-labelledby="tab-birthday">
+            <h2 id="form-title">Pon tu mes. Tu día. Tu año.</h2>
+            <p class="form-description" id="form-description">Día y mes. El año aquí no se mete.</p>
+            <form id="search-form" novalidate>
+              <div class="date-fields" id="date-fields">
+                <div class="field month-field"><label for="month">MES</label><select id="month" name="month" aria-describedby="input-note"></select></div>
+                <div class="field day-field"><label for="day">DÍA</label><select id="day" name="day" aria-describedby="input-note"></select></div>
+                <div class="field year-field" id="year-field" hidden><label for="year">AÑO</label><input id="year" name="year" type="text" inputmode="numeric" maxlength="4" placeholder="2000" value="2000" autocomplete="bday-year"></div>
+              </div>
+              <div class="field number-field" id="number-field" hidden><label for="custom-number">TU NÚMERO, TUS RAZONES</label><input id="custom-number" type="text" inputmode="numeric" maxlength="24" placeholder="Ej. 123456" autocomplete="off" spellcheck="false"><span class="number-hint">De 1 a 24 dígitos. Los ceros iniciales sí cuentan.</span></div>
+              <div class="format-controls"><label for="date-order">Orden de los dígitos</label><select id="date-order"><option value="MDY">Mes / día / año</option><option value="DMY">Día / mes / año</option></select><label class="short-year-label" id="short-year-label" hidden><input type="checkbox" id="short-year"> Año de 2 dígitos</label></div>
+              <p class="input-note" id="input-note">Buscaremos <span id="sequence-preview">0314</span> <span id="format-note">en formato MMDD</span></p>
+              <p class="form-error" id="form-error" role="alert" hidden></p>
+              <button class="search-button" id="search-button" type="submit" disabled><span id="search-label">Cargando decimales…</span><svg class="arrow-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12" stroke="currentColor" stroke-width="1.5"/></svg></button>
+              <div class="form-bottom"><label class="animate-label"><input type="checkbox" id="journey-toggle" checked> Animar recorrido</label><button class="random-button" id="random-button" type="button" disabled><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="3" y="3" width="14" height="14" rx="3" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="7" r="1" fill="currentColor"/><circle cx="13" cy="7" r="1" fill="currentColor"/><circle cx="10" cy="10" r="1" fill="currentColor"/><circle cx="7" cy="13" r="1" fill="currentColor"/><circle cx="13" cy="13" r="1" fill="currentColor"/></svg>Sorpréndeme</button></div>
+              <p class="privacy-line">Tu fecha se queda en tu navegador.</p>
+            </form>
+          </div>
+        </div>
+
+        <div class="result-panel" id="result-panel" aria-busy="true">
+          <div class="panel-heading"><span class="micro-label">02 / TU LUGAR EN π</span><span class="result-status" id="result-status"><span class="status-dot"></span> PREPARANDO</span></div>
+          <div id="result-content" aria-live="polite" aria-atomic="true">
+            <div class="result-loading"><span class="loading-pi">π</span><h2>Desenrollando el infinito…</h2><p>Preparando 2 millones de decimales para buscar.</p></div>
+          </div>
+          <div class="result-actions" id="result-actions" hidden><div class="match-navigation"><button id="previous-match" aria-label="Coincidencia anterior" title="Coincidencia anterior">←</button><span id="match-counter"></span><button id="next-match" aria-label="Siguiente coincidencia" title="Siguiente coincidencia">→</button></div><button class="copy-button" id="copy-result"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="7" y="7" width="9" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M12 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h2" stroke="currentColor" stroke-width="1.5"/></svg><span id="copy-label">Copiar resultado</span></button></div>
+        </div>
+      </section>
+
+      <div class="under-lab"><p><span class="small-pi">π</span> INFINITO NO SIGNIFICA QUE YA LO HAYAMOS BUSCADO TODO.</p><span id="dataset-status">Cargando secuencia…</span></div>
+
+      <section class="oracle" id="oracle" aria-labelledby="oracle-title">
+        <div class="oracle-heading"><div><p class="eyebrow">LAS MATEMÁTICAS NO ESCRITAS DE π</p><h2 id="oracle-title">π su última voluntad<span>.</span></h2><p class="oracle-description">Mes + día + año + hoy. Una fórmula inventada, una fecha de deceso ficticia y cero poderes sobrenaturales.</p></div><span class="fiction-badge">FICCIÓN MATEMÁTICA</span></div>
+        <div class="oracle-grid">
+          <form id="oracle-form" novalidate>
+            <p class="micro-label">TU FECHA DE NACIMIENTO</p>
+            <div class="date-fields"><div class="field month-field"><label for="oracle-month">MES</label><select id="oracle-month"></select></div><div class="field day-field"><label for="oracle-day">DÍA</label><select id="oracle-day"></select></div><div class="field year-field"><label for="oracle-year">AÑO</label><input id="oracle-year" type="text" inputmode="numeric" maxlength="4" placeholder="1990" value="2000" autocomplete="bday-year"></div></div>
+            <div class="today-line"><span>+ HOY</span><time id="oracle-today"></time><span class="today-dot"></span></div>
+            <p class="form-error" id="oracle-error" role="alert" hidden></p>
+            <button class="oracle-button" id="oracle-submit" type="submit" disabled>Consultar mi deceso ficticio <span aria-hidden="true">→</span></button>
+            <button class="sync-birthday" id="sync-birthday" type="button">Usar la fecha del buscador</button>
+            <p class="oracle-caveat">El resultado es una broma generada con números. No predice tu muerte ni usa datos de salud.</p>
+          </form>
+          <div class="oracle-result" id="oracle-result" aria-live="polite" aria-busy="false"><div class="orbital-eye" aria-hidden="true"><div></div><span>π</span></div><p class="oracle-waiting">El destino tiene pésimo<br>soporte técnico.</p><p class="oracle-empty-note">Escribe tu nacimiento. El oráculo hace el resto del alucín.</p></div>
+        </div>
+      </section>
+
+      <section class="fine-print" aria-label="Cómo funciona">
+        <div><span class="info-number">01</span><h3>Datos reales. Oráculo inventado.</h3><p>Las coincidencias en π son exactas. La fecha del oráculo es ficción y cambia con el día.</p></div>
+        <div><span class="info-number">02</span><h3>La posición es real.</h3><p>Contamos desde el primer decimal: el 1 de 3.14159 ocupa la posición 1.</p></div>
+        <div><span class="info-number">03</span><h3>El infinito sigue afuera.</h3><p>Si tu número no aparece, solo sabemos que no está en estos 2 millones de decimales.</p></div>
+      </section>
+    </main>
+    <footer><span>Una microapp de <strong>HecAgus</strong></span><span>HECHO POR CURIOSIDAD <span class="footer-star" aria-hidden="true">✳</span></span><span>π nunca termina. Tú sí puedes cerrar la pestaña.</span></footer>
+  </div>
+
+  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-top"><span class="brand-pi">π</span><button id="about-close" class="dialog-close" aria-label="Cerrar">×</button></div><p class="eyebrow">MATEMÁTICAS, SIN HUMO</p><h2 id="about-title">¿Y mi fecha qué<br>hace en π?</h2><p>Buscamos una secuencia exacta en los primeros <strong>2,000,000 de decimales</strong> de π. Puedes elegir mes/día/año o día/mes/año; los ceros iniciales se conservan.</p><ul><li><strong>Pi cumpleaños:</strong> mes y día, o día y mes.</li><li><strong>Pi nacimiento:</strong> incluye el año completo, o sus dos últimos dígitos si activas esa opción.</li><li><strong>Pi su PTM:</strong> cualquier secuencia de 1 a 24 dígitos.</li><li><strong>El viaje:</strong> muestra fragmentos reales y salta decimales para llegar en unos segundos. No reproduce cada dígito intermedio.</li><li><strong>El oráculo:</strong> inventa una fecha a partir de nacimiento + hoy + π. Su fórmula se puede consultar en cada resultado.</li></ul><p><strong>¿Están todas las fechas en π?</strong> No está demostrado que π contenga cualquier secuencia posible. Tener infinitos decimales no basta para asegurarlo.</p><p class="dialog-note">Decimales calculados con Chudnovsky. Las fechas ingresadas no se envían a un servidor. La fecha de deceso del oráculo es ficción y no tiene valor predictivo.</p><button id="about-done" class="search-button">Entendido. A buscar. <span aria-hidden="true">→</span></button></dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>
