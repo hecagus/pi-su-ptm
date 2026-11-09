@@ -20,4 +20,4 @@ for(let offset=DECIMAL_COUNT;offset<digits.length;offset+=DECIMAL_COUNT){
   manifest.chunks.push({file,sha256:createHash('sha256').update(chunk).digest('hex')});
 }
 writeFileSync('dist/pi-chunks/manifest.json',JSON.stringify(manifest,null,2)+'\n');
-console.log('Prepared four optional blocks of two million decimal digits.');
+console.log('Prepared four additional blocks of two million decimal digits.');

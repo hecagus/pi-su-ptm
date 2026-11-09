@@ -6,7 +6,6 @@ const numberFormat=new Intl.NumberFormat('es-MX');
 const fmt=n=>numberFormat.format(n);
 const state={mode:'birth',digits:'',matches:[],current:0,sequence:'',description:'',loaded:false,edited:false};
 let activeVoyage=null;
-let expansionController=null;
 const modes={
   birthday:{title:'El día que empezó todo.',description:'Día y mes. El año aquí no se mete.',format:'en formato DDMM'},
   birth:{title:'Pon tu mes. Tu día. Tu año.',description:'Tú pones la fecha. Nosotros hacemos el viaje.',format:'en formato MMDDAAAA'},
@@ -27,7 +26,6 @@ MONTHS.forEach((month,index)=>$('month').add(new Option(month,String(index+1))))
 $('month').value='3';setDays();$('day').value='14';
 
 function preview(){
-  cancelExpansion();
   let sequence='';
   if(state.mode==='chaos')sequence=$('custom-number').value;
   else sequence=flexibleDateSequence(Number($('day').value),Number($('month').value),$('year').value,{withYear:state.mode==='birth',order:$('date-order').value,shortYear:$('short-year').checked});
@@ -44,7 +42,7 @@ function setMode(mode,focus=false){
   $('year-field').hidden=mode!=='birth';$('date-fields').hidden=mode==='chaos';$('number-field').hidden=mode!=='chaos';
   document.querySelector('.format-controls').classList.toggle('hidden',mode==='chaos');$('short-year-label').hidden=mode!=='birth';
   $('form-title').textContent=modes[mode].title;$('form-description').textContent=modes[mode].description;
-  $('search-label').textContent=state.loaded?'Buscar mi número en π':'Cargando decimales…';
+  $('search-label').textContent=state.loaded?'Buscar mi número en π':'Cargando 10 millones…';
   setDays();preview();
 }
 document.querySelectorAll('.mode-tab').forEach(tab=>{
@@ -82,7 +80,6 @@ function query(){
 
 function search(){
   if(!state.loaded)return;
-  cancelExpansion();
   let q;try{q=query();}catch(error){$('form-error').textContent=error.message;$('form-error').hidden=false;return;}
   $('form-error').hidden=true;
   if(activeVoyage){activeVoyage.cancel();activeVoyage=null;}
@@ -94,48 +91,6 @@ $('search-form').addEventListener('submit',event=>{event.preventDefault();search
 
 function refreshDatasetStatus(){
   $('dataset-status').textContent=`${fmt(state.digits.length)} decimales · Búsqueda local`;
-}
-function cancelExpansion(){
-  if(!expansionController)return;
-  expansionController.abort();expansionController=null;
-  $('search-button').disabled=false;$('random-button').disabled=false;
-  state.matches=findMatches(state.digits,state.sequence);state.current=0;
-  renderResult();
-}
-async function expandSearch(){
-  if(expansionController||state.digits.length>=EXPANDED_DECIMAL_COUNT)return;
-  if(activeVoyage){activeVoyage.cancel();activeVoyage=null;}
-  const controller=new AbortController();expansionController=controller;
-  $('search-button').disabled=true;$('random-button').disabled=true;
-  $('result-panel').classList.remove('journey-running');
-  $('result-panel').setAttribute('aria-busy','true');$('result-actions').hidden=true;
-  $('result-status').textContent='AMPLIANDO BÚSQUEDA';
-  const loading=element('div','result-loading'),progress=element('p','');
-  const cancel=element('button','retry-button','Cancelar ampliación');
-  cancel.addEventListener('click',cancelExpansion);
-  loading.append(element('span','loading-pi','π'),element('h2','','Hay más π por explorar.'),progress,cancel);
-  $('result-content').replaceChildren(loading);
-  try{
-    for(let offset=state.digits.length;offset<EXPANDED_DECIMAL_COUNT;offset+=DECIMAL_COUNT){
-      progress.textContent=`${fmt(offset)} de ${fmt(EXPANDED_DECIMAL_COUNT)} decimales cargados…`;
-      const part=String(offset/DECIMAL_COUNT).padStart(2,'0');
-      const response=await fetch(`./pi-chunks/${part}.txt`,{signal:controller.signal});
-      if(!response.ok)throw new Error('No se pudo completar la ampliación.');
-      const chunk=await response.text();
-      if(chunk.length!==DECIMAL_COUNT||!/^[0-9]+$/.test(chunk))throw new Error('Un bloque de decimales no llegó completo.');
-      if(expansionController!==controller)return;
-      state.digits+=chunk;refreshDatasetStatus();
-    }
-    if(expansionController!==controller)return;
-    expansionController=null;$('search-button').disabled=false;$('random-button').disabled=false;
-    state.matches=findMatches(state.digits,state.sequence);state.current=0;
-    if($('journey-toggle').checked&&!matchMedia('(prefers-reduced-motion: reduce)').matches)journey();else renderResult();
-  }catch(error){
-    if(expansionController!==controller)return;
-    expansionController=null;$('search-button').disabled=false;$('random-button').disabled=false;
-    state.matches=findMatches(state.digits,state.sequence);state.current=0;renderResult();
-    toast(`${error.message} Puedes volver a intentarlo; conservamos los bloques que ya llegaron.`);
-  }
 }
 
 function element(tag,className,text){const node=document.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node;}
@@ -154,11 +109,6 @@ function renderResult(){
   $('result-actions').hidden=!found;
   if(!found){
     const empty=element('div','result-empty');empty.append(element('div','empty-icon','∞'),element('h2','','Todavía no apareció.'),element('p','empty-sequence',state.sequence),element('p','',`No está en los ${fmt(state.digits.length)} decimales que buscamos. El resto de π sigue siendo otra historia.`));
-    if(state.digits.length<EXPANDED_DECIMAL_COUNT){
-      const expand=element('button','retry-button','Buscar en 10 millones de decimales →');
-      expand.addEventListener('click',expandSearch);
-      empty.append(expand,element('p','number-hint',`Carga hasta ${(EXPANDED_DECIMAL_COUNT-state.digits.length)/1_000_000} MB adicionales. Tu fecha sigue en tu navegador.`));
-    }
     if(state.resultMode==='birth'){
       if(!$('short-year').checked){const shortYear=element('button','retry-button','Probar con año de 2 dígitos →');shortYear.addEventListener('click',()=>{setMode('birth');$('short-year').checked=true;preview();search();});empty.append(shortYear);}
       const shorter=element('button','retry-button','Probar solo día y mes →');shorter.addEventListener('click',()=>{setMode('birthday');search();});empty.append(shorter);
@@ -174,10 +124,6 @@ function renderResult(){
   const coordinate=element('div','digit-coordinate');coordinate.append(element('span','',`DECIMAL ${fmt(excerpt.start+1)}`),element('span','',`DECIMAL ${fmt(excerpt.end)}`));
   const line=element('div','digit-string');line.append(document.createTextNode((excerpt.start>0?'…':'3.')+excerpt.before),element('mark','',excerpt.match),document.createTextNode(excerpt.after+(excerpt.end<state.digits.length?'…':'')));window.append(coordinate,line);content.append(window);
   content.append(element('p','result-caption',`${fmt(state.matches.length)} ${state.matches.length===1?'coincidencia encontrada':'coincidencias encontradas'} en ${fmt(state.digits.length)} decimales.`));
-  if(state.digits.length<EXPANDED_DECIMAL_COUNT){
-    const more=element('button','retry-button','Buscar más coincidencias hasta 10 millones →');
-    more.addEventListener('click',expandSearch);content.append(more);
-  }
   const replay=element('button','replay-button','↻ Repetir viaje desde 3.14159…');replay.addEventListener('click',()=>{if(!matchMedia('(prefers-reduced-motion: reduce)').matches)journey();else toast('El recorrido respeta tu preferencia de movimiento reducido.');});content.append(replay);
   $('match-counter').textContent=`${fmt(state.current+1)} / ${fmt(state.matches.length)}`;
   $('previous-match').disabled=state.matches.length<2;$('next-match').disabled=state.matches.length<2;
@@ -209,17 +155,33 @@ for(const id of ['about-close','about-done'])$(id).addEventListener('click',()=>
 dialog.addEventListener('click',event=>{if(event.target===dialog){const box=dialog.getBoundingClientRect();if(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom)dialog.close();}});
 
 async function loadDigits(){
+  const controller=new AbortController();
+  $('result-panel').setAttribute('aria-busy','true');$('result-status').textContent='CARGANDO';
+  const loading=element('div','result-loading'),progress=element('p','','Cargando 10 millones de decimales…');
+  loading.append(element('span','loading-pi','π'),element('h2','','Desenrollando el infinito…'),progress);
+  $('result-content').replaceChildren(loading);
+  $('search-label').textContent='Cargando 10 millones…';
+  let loaded=0;
   try{
-    const response=await fetch('./pi-digits.txt');if(!response.ok)throw new Error('No se pudo cargar la secuencia.');
-    const digits=(await response.text()).trim();
-    if(digits.length!==DECIMAL_COUNT||!digits.startsWith('14159265358979323846264338327950288419716939937510')||!/^[0-9]+$/.test(digits))throw new Error('La secuencia no llegó completa.');
+    const paths=['./pi-digits.txt',...Array.from({length:EXPANDED_DECIMAL_COUNT/DECIMAL_COUNT-1},(_,i)=>`./pi-chunks/${String(i+1).padStart(2,'0')}.txt`)];
+    const blocks=await Promise.all(paths.map(async(path,index)=>{
+      const response=await fetch(path,{signal:controller.signal});
+      if(!response.ok)throw new Error('No se pudo cargar la secuencia.');
+      const block=await response.text();
+      if(block.length!==DECIMAL_COUNT||!/^[0-9]+$/.test(block))throw new Error('La secuencia no llegó completa.');
+      if(index===0&&!block.startsWith('14159265358979323846264338327950288419716939937510'))throw new Error('La secuencia no es válida.');
+      loaded+=block.length;
+      progress.textContent=`${fmt(loaded)} de ${fmt(EXPANDED_DECIMAL_COUNT)} decimales cargados…`;
+      return block;
+    }));
+    const digits=blocks.join('');
+    if(digits.length!==EXPANDED_DECIMAL_COUNT)throw new Error('La secuencia no llegó completa.');
     state.digits=digits;state.loaded=true;
     $('search-button').disabled=false;$('random-button').disabled=false;$('oracle-submit').disabled=false;$('search-label').textContent='Buscar mi número en π';refreshDatasetStatus();
-    {
-      $('result-panel').setAttribute('aria-busy','false');$('result-status').textContent='LISTO PARA BUSCAR';
-      const ready=element('div','result-loading');ready.append(element('span','loading-pi','π'),element('h2','','Tu fecha está a un viaje de distancia.'),element('p','','Pon mes, día y año. Sigue los decimales hasta tu coincidencia.'));$('result-content').replaceChildren(ready);
-    }
+    $('result-panel').setAttribute('aria-busy','false');$('result-status').textContent='LISTO PARA BUSCAR';
+    const ready=element('div','result-loading');ready.append(element('span','loading-pi','π'),element('h2','','Tu fecha está a un viaje de distancia.'),element('p','','10 millones de decimales listos. Pon mes, día y año.'));$('result-content').replaceChildren(ready);
   }catch(error){
+    controller.abort();
     $('result-panel').setAttribute('aria-busy','false');$('result-status').textContent='SIN CONEXIÓN';$('dataset-status').textContent='No se pudieron cargar los decimales';
     const problem=element('div','result-empty');problem.append(element('div','empty-icon','π'),element('h2','','Los decimales no llegaron.'),element('p','','Revisa tu conexión y vuelve a intentarlo.'));
     const retry=element('button','retry-button','Volver a cargar ↻');retry.addEventListener('click',()=>{retry.disabled=true;loadDigits();});problem.append(retry);$('result-content').replaceChildren(problem);$('search-label').textContent='Esperando los decimales';

@@ -18,4 +18,4 @@ for(const [i,part] of manifest.chunks.entries()){
   total+=chunk.length;
 }
 assert.equal(total,EXPANDED_DECIMAL_COUNT);
-console.log(`Static app ready: ${DECIMAL_COUNT.toLocaleString('en-US')} initial + ${(total-DECIMAL_COUNT).toLocaleString('en-US')} optional decimal digits validated.`);
+console.log(`Static app ready: ${total.toLocaleString('en-US')} decimal digits validated for the first search.`);
