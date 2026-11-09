@@ -188,7 +188,7 @@ $('next-match').addEventListener('click',()=>{state.current=(state.current+1)%st
 
 function toast(message){$('toast').textContent=message;$('toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').hidden=true,3500);}
 $('copy-result').addEventListener('click',async()=>{
-  const text=`${state.description} (${state.sequence}) aparece en la posición ${fmt(state.matches[state.current]+1)} de los decimales de π. Encontré ${fmt(state.matches.length)} ${state.matches.length===1?'coincidencia':'coincidencias'} en los primeros ${fmt(state.digits.length)} decimales. — π su PTM · ${location.origin}`;
+  const text=`${state.description} (${state.sequence}) aparece en la posición ${fmt(state.matches[state.current]+1)} de los decimales de π. Encontré ${fmt(state.matches.length)} ${state.matches.length===1?'coincidencia':'coincidencias'} en los primeros ${fmt(state.digits.length)} decimales. — Su πtmd · ${location.origin}`;
   try{await navigator.clipboard.writeText(text);$('copy-label').textContent='¡Copiado!';toast('Resultado copiado.');}catch{toast('No se pudo copiar. Puedes seleccionar el resultado en pantalla.');}
 });
 $('random-button').addEventListener('click',()=>{

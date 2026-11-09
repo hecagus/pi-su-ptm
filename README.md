@@ -1,4 +1,4 @@
-# π su PTM
+# Su πtmd
 
 Microapp en español para buscar cumpleaños, fechas de nacimiento y secuencias de 1 a 24 dígitos hasta en los primeros **10,000,000 decimales de π**. Al abrir carga dos millones; el resto se descarga solo al pulsar el botón de ampliación.
 
