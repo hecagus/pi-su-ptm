@@ -12,8 +12,9 @@ test('Gregorian century and leap-day boundaries',()=>{
   assert.equal(isValidDate(31,4,2026),false);
   assert.equal(isValidDate(1,1,0),false);
 });
-test('Date encodings preserve zeroes and support both orders',()=>{
-  assert.equal(flexibleDateSequence(14,3,2000,{withYear:true}), '03142000');
+test('Date encodings default to day/month/year and preserve zeroes in either order',()=>{
+  assert.equal(flexibleDateSequence(14,3,2000,{withYear:true}), '14032000');
+  assert.equal(flexibleDateSequence(14,3,2000,{withYear:true,order:'MDY'}), '03142000');
   assert.equal(flexibleDateSequence(14,3,2000,{withYear:true,order:'DMY',shortYear:true}), '140300');
 });
 test('Matches include overlapping sequences and correct boundaries',()=>{

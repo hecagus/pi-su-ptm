@@ -7,7 +7,7 @@ Microapp en español para buscar cumpleaños, fechas de nacimiento y secuencias 
 ## Funciones
 
 - Viaje animado desde `3.14159…` hasta la primera coincidencia o el límite del conjunto de datos. El recorrido se acelera y salta decimales; no reproduce cada cifra.
-- Formatos mes/día/año o día/mes/año, con año de dos o cuatro dígitos.
+- Formato día/mes/año por defecto, con año completo. El selector permite elegir mes/día/año o usar un año corto de forma explícita.
 - Navegación por todas las coincidencias y copia de resultados.
 - Carga automática de 10 millones de decimales en cinco bloques, con progreso y reintento si falla la conexión. La búsqueda se habilita cuando llega la secuencia completa.
 - Oráculo de deceso ficticio, causas cósmicas y otra línea temporal. Es una broma matemática sin valor predictivo.

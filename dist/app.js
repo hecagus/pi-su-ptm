@@ -1,4 +1,4 @@
-import {DECIMAL_COUNT,EXPANDED_DECIMAL_COUNT,MONTHS,pad,isValidDate,flexibleDateSequence,findMatches,getExcerpt} from './core.js';
+import {DECIMAL_COUNT,EXPANDED_DECIMAL_COUNT,DEFAULT_DATE_ORDER,MONTHS,pad,isValidDate,flexibleDateSequence,findMatches,getExcerpt} from './core.js';
 import {dateParts,validateBirth,fictionalOracle,cosmicCauses,lastWords} from './oracle.js';
 import {startVoyage} from './voyage.js';
 const $=id=>document.getElementById(id);
@@ -8,7 +8,7 @@ const state={mode:'birth',digits:'',matches:[],current:0,sequence:'',description
 let activeVoyage=null;
 const modes={
   birthday:{title:'El día que empezó todo.',description:'Día y mes. El año aquí no se mete.',format:'en formato DDMM'},
-  birth:{title:'Pon tu mes. Tu día. Tu año.',description:'Tú pones la fecha. Nosotros hacemos el viaje.',format:'en formato MMDDAAAA'},
+  birth:{title:'Pon tu día. Tu mes. Tu año.',description:'Buscamos día, mes y año completo, en ese orden.',format:'en formato DDMMAAAA'},
   chaos:{title:'Aquí cabe hasta tu número de la suerte.',description:'Un número cualquiera. La explicación es opcional.',format:'sin cambiar ningún dígito'}
 };
 
@@ -24,6 +24,7 @@ function setDays(){
 }
 MONTHS.forEach((month,index)=>$('month').add(new Option(month,String(index+1))));
 $('month').value='3';setDays();$('day').value='14';
+$('date-order').value=DEFAULT_DATE_ORDER;
 
 function preview(){
   let sequence='';
@@ -179,7 +180,7 @@ async function loadDigits(){
     state.digits=digits;state.loaded=true;
     $('search-button').disabled=false;$('random-button').disabled=false;$('oracle-submit').disabled=false;$('search-label').textContent='Buscar mi número en π';refreshDatasetStatus();
     $('result-panel').setAttribute('aria-busy','false');$('result-status').textContent='LISTO PARA BUSCAR';
-    const ready=element('div','result-loading');ready.append(element('span','loading-pi','π'),element('h2','','Tu fecha está a un viaje de distancia.'),element('p','','10 millones de decimales listos. Pon mes, día y año.'));$('result-content').replaceChildren(ready);
+    const ready=element('div','result-loading');ready.append(element('span','loading-pi','π'),element('h2','','Tu fecha está a un viaje de distancia.'),element('p','','10 millones de decimales listos. Pon día, mes y año.'));$('result-content').replaceChildren(ready);
   }catch(error){
     controller.abort();
     $('result-panel').setAttribute('aria-busy','false');$('result-status').textContent='SIN CONEXIÓN';$('dataset-status').textContent='No se pudieron cargar los decimales';

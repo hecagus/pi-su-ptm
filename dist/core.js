@@ -1,5 +1,6 @@
 export const DECIMAL_COUNT = 2_000_000;
 export const EXPANDED_DECIMAL_COUNT = 10_000_000;
+export const DEFAULT_DATE_ORDER = 'DMY';
 export const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 export const pad = n => String(n).padStart(2, '0');
 export function isValidDate(day, month, year) {
@@ -10,7 +11,7 @@ export function isValidDate(day, month, year) {
 export function makeDateSequence(day,month,year,withYear=false) {
   return pad(day)+pad(month)+(withYear ? String(year).padStart(4,'0') : '');
 }
-export function flexibleDateSequence(day,month,year,{withYear=false,order='MDY',shortYear=false}={}) {
+export function flexibleDateSequence(day,month,year,{withYear=false,order=DEFAULT_DATE_ORDER,shortYear=false}={}) {
   if(!['MDY','DMY'].includes(order))throw new Error('Orden de fecha inválido.');
   const prefix=order==='MDY'?pad(month)+pad(day):pad(day)+pad(month);
   const fullYear=String(year).padStart(4,'0');
