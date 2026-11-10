@@ -4,8 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101410">
-  <meta name="description" content="Tu cumpleaños, tu nacimiento o cualquier número: búscalo hasta en diez millones de decimales de pi y descubre su posición real.">
-  <title>Su πtmd — Tu fecha en el infinito</title>
+  <meta name="description" content="Tu fecha está en π. Tu final está por verse. Busca entre diez millones de decimales y juega con destinos ficticios en πde otra vida.">
+  <meta property="og:title" content="πde otra vida">
+  <meta property="og:description" content="Tu fecha está en π. Tu final está por verse.">
+  <meta property="og:type" content="website">
+  <title>πde otra vida — Tu fecha está en π. Tu final está por verse.</title>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./cosmic.css">
@@ -14,7 +17,7 @@
 <body>
   <div class="site-shell">
     <header class="header">
-      <a class="brand" href="./" aria-label="Su πtmd, inicio"><span>Su <span class="brand-pi">π</span>tmd</span></a>
+      <a class="brand" href="./" aria-label="πde otra vida, inicio"><span><span class="brand-pi">π</span>de otra vida</span></a>
       <div class="header-right"><a class="oracle-nav" href="#oracle">El oráculo</a><button class="about-button" id="about-open" aria-haspopup="dialog">¿Qué es esto? <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12" stroke="currentColor" stroke-width="1.5"/></svg></button></div>
     </header>
 
@@ -22,7 +25,7 @@
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
           <p class="eyebrow"><span class="live-dot"></span> UN PEQUEÑO EXPERIMENTO CON EL INFINITO</p>
-          <h1 id="hero-title">Tu fecha.<br><span>En el infinito.</span></h1>
+          <h1 id="hero-title">Tu fecha está en π.<br><span>Tu final está por verse.</span></h1>
           <p class="hero-description">Pon tu día, mes y año. Viaja desde <strong>3.14159…</strong> hasta tu coincidencia. Después, deja que el oráculo se invente el resto.</p>
           <div class="hero-meta"><span class="tiny-cross" aria-hidden="true">✳</span><span>10 millones de decimales. Desde la primera búsqueda.</span></div>
         </div>
@@ -41,7 +44,7 @@
           <div class="mode-tabs" role="tablist" aria-label="Tipo de búsqueda">
             <button class="mode-tab active" id="tab-birthday" role="tab" aria-selected="true" aria-controls="search-panel" data-mode="birthday"><span class="tab-icon" aria-hidden="true">✳</span><span>Pi cumpleaños</span></button>
             <button class="mode-tab" id="tab-birth" role="tab" aria-selected="false" aria-controls="search-panel" tabindex="-1" data-mode="birth"><span class="tab-icon" aria-hidden="true">◷</span><span>Pi nacimiento</span></button>
-            <button class="mode-tab" id="tab-chaos" role="tab" aria-selected="false" aria-controls="search-panel" tabindex="-1" data-mode="chaos"><span class="tab-icon" aria-hidden="true">↯</span><span>Su πtmd</span></button>
+            <button class="mode-tab" id="tab-chaos" role="tab" aria-selected="false" aria-controls="search-panel" tabindex="-1" data-mode="chaos"><span class="tab-icon" aria-hidden="true">↯</span><span>Otro número</span></button>
           </div>
           <div id="search-panel" role="tabpanel" aria-labelledby="tab-birthday">
             <h2 id="form-title">Pon tu día. Tu mes. Tu año.</h2>
@@ -99,7 +102,7 @@
     <footer><span>Una microapp de <strong>HecAgus</strong></span><span>HECHO POR CURIOSIDAD <span class="footer-star" aria-hidden="true">✳</span></span><span>π nunca termina. Tú sí puedes cerrar la pestaña.</span></footer>
   </div>
 
-  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-top"><span class="brand-pi">π</span><button id="about-close" class="dialog-close" aria-label="Cerrar">×</button></div><p class="eyebrow">MATEMÁTICAS, SIN HUMO</p><h2 id="about-title">¿Y mi fecha qué<br>hace en π?</h2><p>Buscamos tu secuencia completa en los primeros <strong>10,000,000 de decimales</strong> de π desde la primera búsqueda. Se cargan automáticamente al abrir la página, con un indicador de progreso. Usamos día/mes/año por defecto. Puedes cambiar el formato si lo necesitas; los ceros iniciales se conservan.</p><ul><li><strong>Pi cumpleaños:</strong> mes y día, o día y mes.</li><li><strong>Pi nacimiento:</strong> incluye el año completo, o sus dos últimos dígitos si activas esa opción.</li><li><strong>Su πtmd:</strong> cualquier secuencia de 1 a 24 dígitos.</li><li><strong>El viaje:</strong> muestra fragmentos reales y salta decimales para llegar en unos segundos. No reproduce cada dígito intermedio.</li><li><strong>El oráculo:</strong> empieza en UNIVERSO 1 · Earth-1218. «Otra línea temporal» cambia a Spider-Man y Dragon Ball, con fecha, desenlace y últimas palabras propios. Son parodias inventadas. La fórmula puede consultarse en cada resultado.</li></ul><p><strong>¿Están todas las fechas en π?</strong> No está demostrado que π contenga cualquier secuencia posible. Tener infinitos decimales no basta para asegurarlo.</p><p class="dialog-note">Decimales calculados con Chudnovsky. Las fechas ingresadas no se envían a un servidor. El oráculo conserva su fórmula con los primeros 2 millones de decimales. Su fecha de deceso es ficción y no tiene valor predictivo.</p><button id="about-done" class="search-button">Entendido. A buscar. <span aria-hidden="true">→</span></button></dialog>
+  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-top"><span class="brand-pi">π</span><button id="about-close" class="dialog-close" aria-label="Cerrar">×</button></div><p class="eyebrow">MATEMÁTICAS, SIN HUMO</p><h2 id="about-title">¿Y mi fecha qué<br>hace en π?</h2><p>Buscamos tu secuencia completa en los primeros <strong>10,000,000 de decimales</strong> de π desde la primera búsqueda. Se cargan automáticamente al abrir la página, con un indicador de progreso. Usamos día/mes/año por defecto. Puedes cambiar el formato si lo necesitas; los ceros iniciales se conservan.</p><ul><li><strong>Pi cumpleaños:</strong> mes y día, o día y mes.</li><li><strong>Pi nacimiento:</strong> incluye el año completo, o sus dos últimos dígitos si activas esa opción.</li><li><strong>Otro número:</strong> cualquier secuencia de 1 a 24 dígitos.</li><li><strong>El viaje:</strong> muestra fragmentos reales y salta decimales para llegar en unos segundos. No reproduce cada dígito intermedio.</li><li><strong>El oráculo:</strong> empieza en UNIVERSO 1 · Earth-1218. «Otra línea temporal» cambia a Spider-Man y Dragon Ball, con fecha, desenlace y últimas palabras propios. Son parodias inventadas. La fórmula puede consultarse en cada resultado.</li></ul><p><strong>¿Están todas las fechas en π?</strong> No está demostrado que π contenga cualquier secuencia posible. Tener infinitos decimales no basta para asegurarlo.</p><p class="dialog-note">Decimales calculados con Chudnovsky. Las fechas ingresadas no se envían a un servidor. El oráculo conserva su fórmula con los primeros 2 millones de decimales. Su fecha de deceso es ficción y no tiene valor predictivo.</p><button id="about-done" class="search-button">Entendido. A buscar. <span aria-hidden="true">→</span></button></dialog>
   <dialog id="card-dialog" class="card-dialog" aria-labelledby="card-title">
     <div class="dialog-top"><h2 id="card-title">Tu destino, en tarjeta.</h2><button id="card-close" class="dialog-close" type="button" aria-label="Cerrar tarjeta">×</button></div>
     <img id="card-preview" width="1080" height="1350" alt="Tarjeta de tu desenlace ficticio">

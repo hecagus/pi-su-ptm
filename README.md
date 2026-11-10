@@ -1,4 +1,6 @@
-# Su πtmd
+# πde otra vida
+
+**Tu fecha está en π. Tu final está por verse.**
 
 Microapp en español para buscar cumpleaños, fechas de nacimiento y secuencias de 1 a 24 dígitos hasta en los primeros **10,000,000 decimales de π**. Al abrir carga automáticamente los diez millones; la primera búsqueda ya revisa todo el rango.
 

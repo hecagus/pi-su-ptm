@@ -138,7 +138,7 @@ $('next-match').addEventListener('click',()=>{state.current=(state.current+1)%st
 
 function toast(message){$('toast').textContent=message;$('toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').hidden=true,3500);}
 $('copy-result').addEventListener('click',async()=>{
-  const text=`${state.description} (${state.sequence}) aparece en la posición ${fmt(state.matches[state.current]+1)} de los decimales de π. Encontré ${fmt(state.matches.length)} ${state.matches.length===1?'coincidencia':'coincidencias'} en los primeros ${fmt(state.digits.length)} decimales. — Su πtmd · ${location.origin}`;
+  const text=`${state.description} (${state.sequence}) aparece en la posición ${fmt(state.matches[state.current]+1)} de los decimales de π. Encontré ${fmt(state.matches.length)} ${state.matches.length===1?'coincidencia':'coincidencias'} en los primeros ${fmt(state.digits.length)} decimales. — πde otra vida · ${location.origin}`;
   try{await navigator.clipboard.writeText(text);$('copy-label').textContent='¡Copiado!';toast('Resultado copiado.');}catch{toast('No se pudo copiar. Puedes seleccionar el resultado en pantalla.');}
 });
 $('random-button').addEventListener('click',()=>{
@@ -269,13 +269,13 @@ $('card-download').addEventListener('click',()=>{
 });
 $('card-share').addEventListener('click',async()=>{
   if(!cardFile)return;
-  try{await navigator.share({files:[cardFile],title:'Su πtmd · Mi destino ficticio'});}catch(error){if(error.name!=='AbortError')$('card-status').textContent='No se pudo compartir. Puedes descargar el PNG y enviarlo desde tu galería.';}
+  try{await navigator.share({files:[cardFile],title:'πde otra vida · Mi destino ficticio'});}catch(error){if(error.name!=='AbortError')$('card-status').textContent='No se pudo compartir. Puedes descargar el PNG y enviarlo desde tu galería.';}
 });
 async function openShareCard(result,ending,button){
   button.disabled=true;button.textContent='Creando tarjeta…';
   try{
     const model=createShareModel(result,humanDate(result.target),location.origin,ending),blob=await createShareCard(model);
-    cardFile=new File([blob],`su-pitmd-universo-${model.number}.png`,{type:'image/png'});
+    cardFile=new File([blob],`pide-otra-vida-universo-${model.number}.png`,{type:'image/png'});
     cardUrl=URL.createObjectURL(blob);$('card-preview').src=cardUrl;
     $('card-preview').alt=`Tarjeta de ficción de ${model.world}. ${model.status}: ${model.title}. ${model.story} «${model.words}». Fecha ficticia: ${model.date}.`;
     $('card-share').hidden=!(navigator.share&&navigator.canShare?.({files:[cardFile]}));

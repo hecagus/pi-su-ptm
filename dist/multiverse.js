@@ -45,5 +45,5 @@ export function getOracleScene(result){
 
 export function oracleShareText(result,dateLabel,origin){
   const scene=getOracleScene(result);
-  return `FICCIÓN MATEMÁTICA · SIN VALOR PREDICTIVO\nSu πtmd · UNIVERSO ${scene.number} · ${scene.name}\n${scene.forecast} ${dateLabel}\nCausa inventada: ${scene.cause}\n${scene.story}\nÚltimas palabras: «${scene.lastWords}»\nSalto ${scene.jump} · Línea ${scene.visit}. Es una broma, no una predicción.\n${origin}#oracle`;
+  return `FICCIÓN MATEMÁTICA · SIN VALOR PREDICTIVO\nπde otra vida · UNIVERSO ${scene.number} · ${scene.name}\nTu fecha está en π. Tu final está por verse.\n${scene.forecast} ${dateLabel}\nCausa inventada: ${scene.cause}\n${scene.story}\nÚltimas palabras: «${scene.lastWords}»\nSalto ${scene.jump} · Línea ${scene.visit}. Es una broma, no una predicción.\n${origin}#oracle`;
 }

@@ -9,7 +9,7 @@ export function createShareModel(result,dateLabel,origin,ending=null){
     status:ending?.statusLabel||'EL ORÁCULO DIJO…',title:ending?.title||scene.cause,
     story:ending?.story||scene.story,words:ending?.lastWords||scene.lastWords,
     choice:ending?.label||'',url:`${origin}/#oracle`,
-    text:ending?`FICCIÓN MATEMÁTICA · SIN VALOR PREDICTIVO\nSu πtmd · UNIVERSO ${scene.number} · ${scene.name}\n${ending.statusLabel}\nDecisión: ${ending.label}\n${ending.title}\n${ending.story}\n«${ending.lastWords}»\nFecha del oráculo (ficticia): ${dateLabel}\n${origin}/#oracle`:oracleShareText(result,dateLabel,origin)
+    text:ending?`FICCIÓN MATEMÁTICA · SIN VALOR PREDICTIVO\nπde otra vida · UNIVERSO ${scene.number} · ${scene.name}\nTu fecha está en π. Tu final está por verse.\n${ending.statusLabel}\nDecisión: ${ending.label}\n${ending.title}\n${ending.story}\n«${ending.lastWords}»\nFecha del oráculo (ficticia): ${dateLabel}\n${origin}/#oracle`:oracleShareText(result,dateLabel,origin)
   };
 }
 
@@ -57,8 +57,9 @@ export async function createShareCard(model){
   for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(938,180,175+i*55,95+i*32,-.5,0,Math.PI*2);ctx.stroke();}
   ctx.globalAlpha=1;ctx.textBaseline='top';
   const write=(text,x,y,font,color)=>{ctx.font=font;ctx.fillStyle=color;ctx.fillText(text,x,y);};
-  write('Su πtmd',88,64,'700 62px sans-serif','#e4ffa7');
-  write('FICCIÓN MATEMÁTICA · SIN VALOR PREDICTIVO',90,157,'600 23px sans-serif','#cab8d6');
+  write('πde otra vida',88,57,'700 62px sans-serif','#e4ffa7');
+  write('Tu fecha está en π. Tu final está por verse.',90,137,'400 27px sans-serif','#e5e9da');
+  write('FICCIÓN MATEMÁTICA · SIN VALOR PREDICTIVO',90,183,'600 23px sans-serif','#cab8d6');
   write(`UNIVERSO ${model.number}`,90,229,'600 24px monospace',model.accent);
   write(model.world,86,270,'700 76px sans-serif',model.accent);
   write(model.stamp,90,363,'400 22px monospace','#b8a7c3');
