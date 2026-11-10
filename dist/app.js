@@ -1,6 +1,8 @@
 import {DECIMAL_COUNT,EXPANDED_DECIMAL_COUNT,DEFAULT_DATE_ORDER,MONTHS,pad,isValidDate,flexibleDateSequence,findMatches,getExcerpt} from './core.js';
 import {dateParts,validateBirth,fictionalOracle} from './oracle.js';
-import {ORACLE_UNIVERSES,getOracleScene,oracleShareText} from './multiverse.js';
+import {ORACLE_UNIVERSES,getOracleScene} from './multiverse.js';
+import {getDestinyChallenge,chooseDestiny,normalizeEndings,unlockEnding,ENDING_COUNT,ENDING_STORAGE_KEY} from './destiny.js';
+import {createShareModel,createShareCard} from './share-card.js';
 import {startVoyage} from './voyage.js';
 const $=id=>document.getElementById(id);
 const numberFormat=new Intl.NumberFormat('es-MX');
@@ -217,7 +219,74 @@ function runOracle(birth,universe=0){
   },matchMedia('(prefers-reduced-motion: reduce)').matches?0:1300);
 }
 $('oracle-form').addEventListener('submit',event=>{event.preventDefault();if(!/^\d{4}$/.test($('oracle-year').value)){$('oracle-error').textContent='Escribe un año de cuatro dígitos.';$('oracle-error').hidden=false;return;}runOracle({day:Number($('oracle-day').value),month:Number($('oracle-month').value),year:Number($('oracle-year').value)},0);});
+
+let endings=[],canSaveEndings=true,cardFile=null,cardUrl=null;
+try{endings=normalizeEndings(JSON.parse(localStorage.getItem(ENDING_STORAGE_KEY)||'[]'));}catch{canSaveEndings=false;}
+
+function renderDestinyGame(result,onEnding){
+  const game=element('section','destiny-game'),challenge=getDestinyChallenge(result);
+  game.setAttribute('aria-label','Evita tu destino');
+  function play(focus=false){
+    onEnding(null);
+    game.replaceChildren(element('span','destiny-eyebrow','MINIJUEGO · TU DECISIÓN CAMBIA EL RELATO'),element('h4','','Evita tu destino'),element('p','destiny-prompt','π ya improvisó tu final. ¿Qué vas a hacer?'));
+    const choices=element('div','destiny-choices');
+    challenge.choices.forEach((choice,index)=>{
+      const button=element('button','destiny-choice');button.type='button';
+      const number=element('span','',`0${index+1}`);number.setAttribute('aria-hidden','true');
+      button.append(number,element('span','',choice.label));
+      button.addEventListener('click',()=>finish(choice.id));choices.append(button);
+    });
+    game.append(choices,progress());
+    if(focus)choices.querySelector('button').focus();
+  }
+  function progress(){
+    return element('p','destiny-progress',`${endings.length} / ${ENDING_COUNT} finales descubiertos · ${canSaveEndings?'Guardados en este navegador.':'Disponibles en esta pestaña.'}`);
+  }
+  function finish(choiceId){
+    const ending=chooseDestiny(result,choiceId),isNew=!endings.includes(ending.endingId);
+    endings=unlockEnding(endings,ending.endingId);
+    try{localStorage.setItem(ENDING_STORAGE_KEY,JSON.stringify(endings));canSaveEndings=true;}catch{canSaveEndings=false;}
+    onEnding(ending);
+    const title=element('h5','destiny-ending-title',ending.title);title.tabIndex=-1;
+    game.replaceChildren(element('span','destiny-eyebrow',ending.statusLabel),title,element('p','destiny-ending-story',ending.story),element('p','destiny-ending-words',`«${ending.lastWords}»`),element('p','destiny-unlocked',isNew?'✦ Final nuevo desbloqueado':'Este final ya está en tu colección.'));
+    const buttons=element('div','destiny-ending-actions'),replay=element('button','','Probar otra decisión');
+    replay.type='button';replay.addEventListener('click',()=>play(true));buttons.append(replay);
+    if(ending.status==='portal'){
+      const portal=element('button','','Cruzar al siguiente universo →');portal.type='button';
+      portal.addEventListener('click',()=>runOracle(oracleBirth,result.universe+1));buttons.append(portal);
+    }
+    game.append(buttons,progress(),element('p','destiny-fiction','Final de ficción. La fecha del oráculo conserva su fórmula; tu decisión cambia la historia.'));
+    title.focus();
+  }
+  play();return game;
+}
+
+$('card-close').addEventListener('click',()=>$('card-dialog').close());
+$('card-dialog').addEventListener('close',()=>{if(cardUrl)URL.revokeObjectURL(cardUrl);cardUrl=null;cardFile=null;$('card-preview').removeAttribute('src');});
+$('card-download').addEventListener('click',()=>{
+  if(!cardUrl||!cardFile)return;
+  const link=document.createElement('a');link.href=cardUrl;link.download=cardFile.name;document.body.append(link);link.click();link.remove();
+});
+$('card-share').addEventListener('click',async()=>{
+  if(!cardFile)return;
+  try{await navigator.share({files:[cardFile],title:'Su πtmd · Mi destino ficticio'});}catch(error){if(error.name!=='AbortError')$('card-status').textContent='No se pudo compartir. Puedes descargar el PNG y enviarlo desde tu galería.';}
+});
+async function openShareCard(result,ending,button){
+  button.disabled=true;button.textContent='Creando tarjeta…';
+  try{
+    const model=createShareModel(result,humanDate(result.target),location.origin,ending),blob=await createShareCard(model);
+    cardFile=new File([blob],`su-pitmd-universo-${model.number}.png`,{type:'image/png'});
+    cardUrl=URL.createObjectURL(blob);$('card-preview').src=cardUrl;
+    $('card-preview').alt=`Tarjeta de ficción de ${model.world}. ${model.status}: ${model.title}. ${model.story} «${model.words}». Fecha ficticia: ${model.date}.`;
+    $('card-share').hidden=!(navigator.share&&navigator.canShare?.({files:[cardFile]}));
+    $('card-status').textContent=$('card-share').hidden?'Descarga la imagen para enviarla desde tu galería.':'Lista para compartir como imagen o descargar.';
+    $('card-dialog').showModal();
+  }catch{toast('No se pudo crear la tarjeta. Puedes usar «Copiar alucín».');}
+  finally{button.disabled=false;button.textContent='Crear tarjeta para compartir';}
+}
+
 function renderOracle(result){
+  let activeEnding=null;
   const scene=getOracleScene(result);
   const output=$('oracle-result');output.className='oracle-result oracle-answer';output.setAttribute('aria-busy','false');output.style.setProperty('--world-accent',scene.accent);output.replaceChildren();
   output.append(element('span','fiction-badge','FECHA FICTICIA · SIN VALOR PREDICTIVO'));
@@ -226,10 +295,12 @@ function renderOracle(result){
   output.append(element('p','oracle-output-label',scene.forecast),element('h4','oracle-date',humanDate(result.target)),element('p','oracle-days',`${fmt(result.days)} días para terminar tus pendientes imaginarios.`));
   const cause=element('div','cosmic-cause');cause.append(element('span','','TU DESENLACE EN ESTE UNIVERSO'),element('p','oracle-cause-title',scene.cause),element('p','oracle-story',scene.story));output.append(cause);
   const words=element('div','last-words');words.append(element('span','','TUS ÚLTIMAS PALABRAS, SEGÚN π'),element('p','',`«${scene.lastWords}»`));output.append(words);
+  output.append(renderDestinyGame(result,ending=>{activeEnding=ending;}));
+  const card=element('button','destiny-card-button','Crear tarjeta para compartir');card.type='button';card.addEventListener('click',()=>openShareCard(result,activeEnding,card));output.append(card);
   const details=element('details',''),summary=element('summary','','Ver las matemáticas no escritas');details.append(summary,element('pre','oracle-formula',`Nacimiento MMDD AÑO: ${result.born}\n+ Hoy MMDD AÑO:      ${result.current}\n= Suma:              ${result.sum}\n\nSalto temporal: ${result.universe}\nUniverso de la app: ${scene.number} · ${scene.name}\nÍndice = (suma + salto × 314159)\n         módulo (2,000,000 − 11)\nPosición en π: ${fmt(result.offset+1)}\n12 dígitos reales: ${result.fragment}\nDías = (fragmento módulo 25,550) + 1\nFecha ficticia = hoy + ${fmt(result.days)} días\n\nEsta receta es inventada. No estima longevidad.`));output.append(details);
   const actions=element('div','oracle-result-buttons'),reroll=element('button','','Otra línea temporal →'),copy=element('button','','Copiar alucín');
   reroll.addEventListener('click',()=>runOracle(oracleBirth,oracleUniverse+1));
-  copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(oracleShareText(result,humanDate(result.target),location.origin));toast('Universo y alucín copiados con su etiqueta de ficción.');}catch{toast('No se pudo copiar. Selecciona el resultado en pantalla.');}});
+  copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(createShareModel(result,humanDate(result.target),location.origin,activeEnding).text);toast('Universo y alucín copiados con su etiqueta de ficción.');}catch{toast('No se pudo copiar. Selecciona el resultado en pantalla.');}});
   actions.append(reroll,copy);output.append(actions);
   if(result.universe>0){const home=element('button','oracle-return','↶ Volver a Earth-1218');home.addEventListener('click',()=>runOracle(oracleBirth,0));output.append(home);}
   output.append(element('p','oracle-universe',`SALTO ${fmt(scene.jump)} · LÍNEA ${fmt(scene.visit)} · RESULTADO REPRODUCIBLE`),element('p','oracle-parody-note','La numeración es de esta app. Los relatos son parodias inventadas, no historias oficiales.'));

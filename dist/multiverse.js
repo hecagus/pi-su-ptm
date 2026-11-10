@@ -40,7 +40,7 @@ export function getOracleScene(result){
   const visit=Math.floor(result.universe/ORACLE_UNIVERSES.length)+1;
   const variant=Number((BigInt(result.fragment)+BigInt(visit-1))%BigInt(world.stories.length));
   const {stories,...identity}=world;
-  return {...identity,...stories[variant],visit,jump:result.universe};
+  return {...identity,...stories[variant],variant,visit,jump:result.universe};
 }
 
 export function oracleShareText(result,dateLabel,origin){

@@ -75,7 +75,7 @@
       <div class="under-lab"><p><span class="small-pi">π</span> INFINITO NO SIGNIFICA QUE YA LO HAYAMOS BUSCADO TODO.</p><span id="dataset-status">Cargando secuencia…</span></div>
 
       <section class="oracle" id="oracle" aria-labelledby="oracle-title">
-        <div class="oracle-heading"><div><p class="eyebrow">LAS MATEMÁTICAS NO ESCRITAS DE π</p><h2 id="oracle-title">π su última voluntad<span>.</span></h2><p class="oracle-description">Tu primera parada es Earth-1218. Salta al universo de Spider-Man o Dragon Ball: cada mundo tiene su propia fecha ficticia y su forma absurda de terminar la historia.</p></div><span class="fiction-badge">FICCIÓN MATEMÁTICA</span></div>
+        <div class="oracle-heading"><div><p class="eyebrow">LAS MATEMÁTICAS NO ESCRITAS DE π</p><h2 id="oracle-title">π su última voluntad<span>.</span></h2><p class="oracle-description">Tu primera parada es Earth-1218. Salta al universo de Spider-Man o Dragon Ball, intenta evitar tu destino y comparte tu final en una tarjeta. Cada decisión abre otro relato.</p></div><span class="fiction-badge">FICCIÓN MATEMÁTICA</span></div>
         <div class="oracle-grid">
           <form id="oracle-form" novalidate>
             <p class="micro-label">TU FECHA DE NACIMIENTO</p>
@@ -100,6 +100,13 @@
   </div>
 
   <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-top"><span class="brand-pi">π</span><button id="about-close" class="dialog-close" aria-label="Cerrar">×</button></div><p class="eyebrow">MATEMÁTICAS, SIN HUMO</p><h2 id="about-title">¿Y mi fecha qué<br>hace en π?</h2><p>Buscamos tu secuencia completa en los primeros <strong>10,000,000 de decimales</strong> de π desde la primera búsqueda. Se cargan automáticamente al abrir la página, con un indicador de progreso. Usamos día/mes/año por defecto. Puedes cambiar el formato si lo necesitas; los ceros iniciales se conservan.</p><ul><li><strong>Pi cumpleaños:</strong> mes y día, o día y mes.</li><li><strong>Pi nacimiento:</strong> incluye el año completo, o sus dos últimos dígitos si activas esa opción.</li><li><strong>Su πtmd:</strong> cualquier secuencia de 1 a 24 dígitos.</li><li><strong>El viaje:</strong> muestra fragmentos reales y salta decimales para llegar en unos segundos. No reproduce cada dígito intermedio.</li><li><strong>El oráculo:</strong> empieza en UNIVERSO 1 · Earth-1218. «Otra línea temporal» cambia a Spider-Man y Dragon Ball, con fecha, desenlace y últimas palabras propios. Son parodias inventadas. La fórmula puede consultarse en cada resultado.</li></ul><p><strong>¿Están todas las fechas en π?</strong> No está demostrado que π contenga cualquier secuencia posible. Tener infinitos decimales no basta para asegurarlo.</p><p class="dialog-note">Decimales calculados con Chudnovsky. Las fechas ingresadas no se envían a un servidor. El oráculo conserva su fórmula con los primeros 2 millones de decimales. Su fecha de deceso es ficción y no tiene valor predictivo.</p><button id="about-done" class="search-button">Entendido. A buscar. <span aria-hidden="true">→</span></button></dialog>
+  <dialog id="card-dialog" class="card-dialog" aria-labelledby="card-title">
+    <div class="dialog-top"><h2 id="card-title">Tu destino, en tarjeta.</h2><button id="card-close" class="dialog-close" type="button" aria-label="Cerrar tarjeta">×</button></div>
+    <img id="card-preview" width="1080" height="1350" alt="Tarjeta de tu desenlace ficticio">
+    <p id="card-status" role="status"></p>
+    <div class="card-dialog-actions"><button id="card-share" type="button">Compartir imagen</button><button id="card-download" type="button">Descargar PNG</button></div>
+    <p class="card-privacy">La tarjeta muestra un relato inventado. No incluye tu fecha de nacimiento.</p>
+  </dialog>
   <div class="toast" id="toast" role="status" hidden></div>
 </body>
 </html>

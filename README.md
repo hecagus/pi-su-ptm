@@ -11,6 +11,8 @@ Microapp en español para buscar cumpleaños, fechas de nacimiento y secuencias 
 - Navegación por todas las coincidencias y copia de resultados.
 - Carga automática de 10 millones de decimales en cinco bloques, con progreso y reintento si falla la conexión. La búsqueda se habilita cuando llega la secuencia completa.
 - Oráculo de deceso ficticio con universos reconocibles: UNIVERSO 1 · Earth-1218, UNIVERSO 2 · Spider-Man y UNIVERSO 3 · Dragon Ball. Cada salto combina su fecha ficticia con una escena y últimas palabras de ese mundo; copiar conserva el relato y su etiqueta de ficción.
+- «Evita tu destino»: tres decisiones por escena y 36 finales originales. Puedes sobrevivir, perder la ronda o cruzar al siguiente universo. Repetir permite descubrir los otros finales; solo sus identificadores se guardan en `localStorage`, sin fechas de nacimiento. Si el navegador bloquea el almacenamiento, el juego funciona durante la sesión.
+- Tarjeta PNG de 1080 × 1350 con el universo y el final elegido. Se genera en el dispositivo, incluye la etiqueta de ficción y no muestra el nacimiento. En navegadores con intercambio de archivos se puede compartir directamente; descargar está siempre disponible. «Copiar alucín» también incluye la decisión actual.
 - Búsquedas y cálculos locales: la fecha introducida no se envía a ningún servidor.
 - Interfaz adaptable, navegación con teclado y respeto al movimiento reducido.
 
