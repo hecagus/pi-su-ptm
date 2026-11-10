@@ -19,14 +19,3 @@ export function fictionalOracle(birth,today,digits,universe=0) {
   const target=new Date(0);target.setUTCFullYear(today.year,today.month-1,today.day);target.setUTCHours(12,0,0,0);target.setUTCDate(target.getUTCDate()+days);
   return {born,current,sum:sum.toString(),offset,fragment,days,target:target.toISOString().slice(0,10),universe};
 }
-export const cosmicCauses=[
- 'Intentaste imprimir todos los decimales de π. La impresora contraatacó.',
- 'Encontraste el final de π y el universo te cerró la pestaña.',
- 'Una TPV pidió reiniciar. Tú decidiste discutir.',
- 'Aceptaste una actualización que decía «solo tomará un minuto».',
- 'Dividiste entre cero para ver qué pasaba. Pasó.',
- 'Le preguntaste a dos IA si la quesadilla lleva queso. Ninguna se rindió.',
- 'Buscaste el teléfono mientras lo tenías en la mano. En otra dimensión.',
- 'Guardaste «final_final_ahora_sí.pdf». El destino encontró otra versión.'
-];
-export const lastWords=['Ahorita lo respaldo.','En mi máquina sí funciona.','Solo voy a cambiar una cosita.','¿Y si lo automatizamos?','No tarda, son dos clics.','Déjame probar algo.','Esta vez sí va a compilar.','Ya casi termino.'];

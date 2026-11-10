@@ -2,7 +2,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {DECIMAL_COUNT,EXPANDED_DECIMAL_COUNT} from '../dist/core.js';
-for (const name of ['index.html','styles.css','cosmic.css','app.js','core.js','oracle.js','voyage.js','pi-digits.txt']) assert.ok(existsSync(`dist/${name}`),`Missing ${name}`);
+for (const name of ['index.html','styles.css','cosmic.css','app.js','core.js','oracle.js','multiverse.js','voyage.js','pi-digits.txt']) assert.ok(existsSync(`dist/${name}`),`Missing ${name}`);
 const digits = readFileSync('dist/pi-digits.txt','utf8');
 assert.equal(digits.length,DECIMAL_COUNT);
 assert.ok(digits.startsWith('14159265358979323846264338327950288419716939937510'));

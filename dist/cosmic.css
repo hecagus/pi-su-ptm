@@ -3,3 +3,18 @@
 @media(max-width:1000px){.oracle{padding:26px}.oracle-grid{gap:25px}.oracle-date{font-size:27px}.oracle .field select,.oracle .field input{font-size:15px;padding-left:10px}.oracle h2{font-size:31px}.fiction-badge{font-size:7px}.oracle .year-field{width:27%}}
 @media(max-width:730px){.header-right{gap:17px}.oracle-nav{font-size:10px}.hero-description{max-width:345px}.hero-description strong{font-size:12px}.format-controls{font-size:9px;gap:8px}.format-controls>select{font-size:10px}.short-year-label{font-size:10px}.oracle{padding:23px 20px;margin-top:37px;border-radius:12px}.oracle-heading{display:block}.oracle-heading>.fiction-badge{display:inline-flex;margin-top:17px}.oracle h2{font-size:29px;letter-spacing:-1px}.oracle .eyebrow{font-size:8px;letter-spacing:.7px}.oracle-description{font-size:11px;line-height:1.8}.oracle-grid{grid-template-columns:1fr;gap:22px;margin-top:25px}.oracle .field select,.oracle .field input{font-size:16px}.oracle-result{min-height:290px;padding:22px}.oracle-date{font-size:31px}.oracle .year-field{width:28%}.oracle .day-field{width:22%}.voyage-galaxy{height:185px}.voyage-tape{font-size:17px;letter-spacing:2px}.voyage-footer>span{max-width:170px;line-height:1.6}.voyage-distance>strong{font-size:35px}.form-bottom{margin-top:17px}.oracle-result .fiction-badge{font-size:7px}.date-fields .month-field select{font-size:15px}.day-field{width:22%}.date-fields:has(.year-field:not([hidden])) .month-field{width:42%;flex:1}.oracle-result-buttons{gap:12px}.oracle-result-buttons button{font-size:10px}.form-bottom>.animate-label{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.voyage-ring,.oracle-consulting{animation:none!important}}
+
+.oracle-world{width:100%;margin:18px 0 4px;padding:16px;border:1px solid var(--world-accent,#d4b1fa);border-radius:8px;background:#ffffff05}
+.oracle-world-number{font:9px var(--mono);letter-spacing:1.6px;color:var(--world-accent,#d4b1fa)}
+.oracle-world-name{margin:7px 0 6px;font-size:29px;font-weight:650;letter-spacing:-1px;line-height:1.15;color:var(--world-accent,#d4b1fa);overflow-wrap:anywhere}
+.oracle-world-setting{margin:0;font-size:11px;line-height:1.6;color:#c9bdd4}
+.oracle-answer .oracle-date,.oracle-consulting .oracle-waiting{color:var(--world-accent,#d4b1fa)}
+.cosmic-cause .oracle-cause-title{font-weight:650;color:#f0e5f7}
+.cosmic-cause .oracle-story{font-size:12px;line-height:1.75;color:#c5b6d0;margin-top:9px}
+.oracle-result-buttons{flex-wrap:wrap;gap:10px}
+.oracle-result-buttons button{min-height:44px;padding:9px 12px;border:1px solid #76568c;border-radius:6px;font-size:11px}
+.oracle-result-buttons button:first-child{flex:1;min-width:165px;border-color:var(--world-accent,#d4b1fa);background:var(--world-accent,#d4b1fa);color:#211527;font-weight:650}
+.oracle-return{align-self:flex-start;min-height:40px;margin-top:12px;padding:7px 0;background:none;border:0;color:var(--world-accent,#d4b1fa);font-size:11px;text-decoration:underline;text-underline-offset:4px}
+.oracle-universe{line-height:1.7;overflow-wrap:anywhere}
+.oracle-parody-note{font-size:9px;line-height:1.7;color:#bcaaca;margin:12px 0 0}
+@media(max-width:450px){.oracle-world{padding:14px}.oracle-world-name{font-size:27px}.oracle-result-buttons{align-items:stretch}.oracle-result-buttons button:first-child{flex-basis:100%}.oracle-result-buttons button:last-child{flex:1}}

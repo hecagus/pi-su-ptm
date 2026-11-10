@@ -1,5 +1,6 @@
 import {DECIMAL_COUNT,EXPANDED_DECIMAL_COUNT,DEFAULT_DATE_ORDER,MONTHS,pad,isValidDate,flexibleDateSequence,findMatches,getExcerpt} from './core.js';
-import {dateParts,validateBirth,fictionalOracle,cosmicCauses,lastWords} from './oracle.js';
+import {dateParts,validateBirth,fictionalOracle} from './oracle.js';
+import {ORACLE_UNIVERSES,getOracleScene,oracleShareText} from './multiverse.js';
 import {startVoyage} from './voyage.js';
 const $=id=>document.getElementById(id);
 const numberFormat=new Intl.NumberFormat('es-MX');
@@ -209,18 +210,29 @@ function runOracle(birth,universe=0){
   const today=refreshToday();
   try{validateBirth(birth,today);if(!state.loaded)throw new Error('Espera a que se carguen los decimales.');}catch(error){$('oracle-error').textContent=error.message;$('oracle-error').hidden=false;return;}
   clearTimeout(oracleTimer);oracleUniverse=universe;oracleBirth={...birth};$('oracle-error').hidden=true;
-  const output=$('oracle-result');output.className='oracle-result oracle-consulting';output.setAttribute('aria-busy','true');output.replaceChildren(element('div','empty-icon','π'),element('p','oracle-waiting','Consultando las matemáticas no escritas…'),element('p','oracle-empty-note','El departamento de destino está improvisando.'));
+  const world=ORACLE_UNIVERSES[universe%ORACLE_UNIVERSES.length];
+  const output=$('oracle-result');output.className='oracle-result oracle-consulting';output.style.setProperty('--world-accent',world.accent);output.setAttribute('aria-busy','true');output.replaceChildren(element('div','empty-icon','π'),element('p','oracle-waiting',`Abriendo portal a ${world.name}…`),element('p','oracle-empty-note','El departamento de destino está improvisando.'));
   oracleTimer=setTimeout(()=>{
     oracleLast=fictionalOracle(birth,today,state.digits.slice(0,DECIMAL_COUNT),universe);renderOracle(oracleLast);
   },matchMedia('(prefers-reduced-motion: reduce)').matches?0:1300);
 }
 $('oracle-form').addEventListener('submit',event=>{event.preventDefault();if(!/^\d{4}$/.test($('oracle-year').value)){$('oracle-error').textContent='Escribe un año de cuatro dígitos.';$('oracle-error').hidden=false;return;}runOracle({day:Number($('oracle-day').value),month:Number($('oracle-month').value),year:Number($('oracle-year').value)},0);});
 function renderOracle(result){
-  const output=$('oracle-result');output.className='oracle-result oracle-answer';output.setAttribute('aria-busy','false');output.replaceChildren();
-  output.append(element('span','fiction-badge','FECHA FICTICIA · SIN VALOR PREDICTIVO'),element('p','oracle-output-label','Tu fecha de deceso, según este alucín:'),element('h3','oracle-date',humanDate(result.target)),element('p','oracle-days',`${fmt(result.days)} días para terminar tus pendientes imaginarios.`));
-  const cause=element('div','cosmic-cause');cause.append(element('span','','CAUSA CÓSMICA INVENTADA'),element('p','',cosmicCauses[Number(BigInt(result.fragment)%BigInt(cosmicCauses.length))]));output.append(cause);
-  const words=element('div','last-words');words.append(element('span','','TUS ÚLTIMAS PALABRAS, SEGÚN π'),element('p','',`«${lastWords[Number((BigInt(result.fragment)/17n)%BigInt(lastWords.length))]}»`));output.append(words);
-  const details=element('details',''),summary=element('summary','','Ver las matemáticas no escritas');details.append(summary,element('pre','oracle-formula',`Nacimiento MMDD AÑO: ${result.born}\n+ Hoy MMDD AÑO:      ${result.current}\n= Suma:              ${result.sum}\n\nÍndice = (suma + universo × 314159)\n         módulo (2,000,000 − 11)\nPosición en π: ${fmt(result.offset+1)}\n12 dígitos reales: ${result.fragment}\nDías = (fragmento módulo 25,550) + 1\nFecha ficticia = hoy + ${fmt(result.days)} días\n\nEsta receta es inventada. No estima longevidad.`));output.append(details);
-  const actions=element('div','oracle-result-buttons'),reroll=element('button','','Otra línea temporal →'),copy=element('button','','Copiar alucín');reroll.addEventListener('click',()=>runOracle(oracleBirth,oracleUniverse+1));copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(`FICCIÓN MATEMÁTICA · SIN VALOR PREDICTIVO\nπ su última voluntad inventó mi fecha de deceso: ${humanDate(result.target)}.\nCausa cósmica: ${cosmicCauses[Number(BigInt(result.fragment)%BigInt(cosmicCauses.length))]}\nUniverso ${result.universe+1}. Es una broma, no una predicción.\n${location.origin}#oracle`);toast('Alucín copiado con su etiqueta de ficción.');}catch{toast('No se pudo copiar. Selecciona el resultado en pantalla.');}});actions.append(reroll,copy);output.append(actions,element('p','oracle-universe',`UNIVERSO ${fmt(result.universe+1)} · MISMA FECHA + MISMO DÍA = MISMO ALUCÍN`));
+  const scene=getOracleScene(result);
+  const output=$('oracle-result');output.className='oracle-result oracle-answer';output.setAttribute('aria-busy','false');output.style.setProperty('--world-accent',scene.accent);output.replaceChildren();
+  output.append(element('span','fiction-badge','FECHA FICTICIA · SIN VALOR PREDICTIVO'));
+  const world=element('div','oracle-world');
+  world.append(element('span','oracle-world-number',`UNIVERSO ${scene.number}`),element('h3','oracle-world-name',scene.name),element('p','oracle-world-setting',scene.setting));output.append(world);
+  output.append(element('p','oracle-output-label',scene.forecast),element('h4','oracle-date',humanDate(result.target)),element('p','oracle-days',`${fmt(result.days)} días para terminar tus pendientes imaginarios.`));
+  const cause=element('div','cosmic-cause');cause.append(element('span','','TU DESENLACE EN ESTE UNIVERSO'),element('p','oracle-cause-title',scene.cause),element('p','oracle-story',scene.story));output.append(cause);
+  const words=element('div','last-words');words.append(element('span','','TUS ÚLTIMAS PALABRAS, SEGÚN π'),element('p','',`«${scene.lastWords}»`));output.append(words);
+  const details=element('details',''),summary=element('summary','','Ver las matemáticas no escritas');details.append(summary,element('pre','oracle-formula',`Nacimiento MMDD AÑO: ${result.born}\n+ Hoy MMDD AÑO:      ${result.current}\n= Suma:              ${result.sum}\n\nSalto temporal: ${result.universe}\nUniverso de la app: ${scene.number} · ${scene.name}\nÍndice = (suma + salto × 314159)\n         módulo (2,000,000 − 11)\nPosición en π: ${fmt(result.offset+1)}\n12 dígitos reales: ${result.fragment}\nDías = (fragmento módulo 25,550) + 1\nFecha ficticia = hoy + ${fmt(result.days)} días\n\nEsta receta es inventada. No estima longevidad.`));output.append(details);
+  const actions=element('div','oracle-result-buttons'),reroll=element('button','','Otra línea temporal →'),copy=element('button','','Copiar alucín');
+  reroll.addEventListener('click',()=>runOracle(oracleBirth,oracleUniverse+1));
+  copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(oracleShareText(result,humanDate(result.target),location.origin));toast('Universo y alucín copiados con su etiqueta de ficción.');}catch{toast('No se pudo copiar. Selecciona el resultado en pantalla.');}});
+  actions.append(reroll,copy);output.append(actions);
+  if(result.universe>0){const home=element('button','oracle-return','↶ Volver a Earth-1218');home.addEventListener('click',()=>runOracle(oracleBirth,0));output.append(home);}
+  output.append(element('p','oracle-universe',`SALTO ${fmt(scene.jump)} · LÍNEA ${fmt(scene.visit)} · RESULTADO REPRODUCIBLE`),element('p','oracle-parody-note','La numeración es de esta app. Los relatos son parodias inventadas, no historias oficiales.'));
 }
+
 loadDigits();
